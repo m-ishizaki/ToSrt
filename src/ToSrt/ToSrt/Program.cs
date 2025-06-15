@@ -18,8 +18,8 @@ static string Format(long no, Line line, long start, long span)
     var description = string.Join("<br>", line.Description).Trim();
 
     var result = @$"{no}
-{time_start},{time_start_second} -- > {time_end},{time_end_second}
-<font size = ""16""><font color = ""#ffffff"">{title}<br>{description}</font></font>";
+{time_start},{time_start_second} --> {time_end},{time_end_second}
+<font size=""16""><font color=""#ffffff"">{title}<br>{description}</font></font>";
     return result;
 }
 
