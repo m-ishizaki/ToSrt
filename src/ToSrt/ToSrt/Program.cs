@@ -15,11 +15,12 @@ static string Format(long no, Line line, long start, long span)
     var time_start = TimeFormat(time_start_second);
     var time_end = TimeFormat(time_end_second);
     var title = line.Title.Trim();
-    var description = string.Join("<br>", line.Description).Trim();
+    var description = string.Join(Environment.NewLine, line.Description).Trim();
 
     var result = @$"{no}
 {time_start},{time_start_second} --> {time_end},{time_end_second}
-<font size=""16""><font color=""#ffffff"">{title}<br>{description}</font></font>";
+<font size=""16""><font color=""#ffffff"">{title}</font></font>
+<font size=""12""><font color=""#ffffff"">{description}</font></font>";
     return result;
 }
 
@@ -41,7 +42,7 @@ static Line ToLine(string line)
         var _time
             = (long.TryParse(values[0], out var hours) ? hours * 3600 : 0)
             + (long.TryParse(values[1], out var minutes) ? minutes * 60 : 0)
-            + (long.TryParse(values[1], out var second) ? second : 0);
+            + (long.TryParse(values[2], out var second) ? second : 0);
         time = _time;
     }
     var title = elms.Skip(1).FirstOrDefault() ?? string.Empty;
