@@ -1,28 +1,27 @@
-﻿
-using ToSrt;
+﻿using ToSrt;
 
-var start = long.TryParse(args.Skip(1).FirstOrDefault(), out var _start) ? _start : 5;
-var span = long.TryParse(args.Skip(2).FirstOrDefault(), out var _span) ? _span : 5;
-
-var lines = File.ReadAllLines(args[0]).Select(Commons.ToLine).ToArray();
-
-if (args.Skip(3).FirstOrDefault() == null)
+if(args?.Length == 0)
 {
-    var srtElms = lines.Select((line, index) => ToSrt.ToSrt.Format(index + 1, line, start, span)).ToArray();
-    var result = string.Join(Environment.NewLine + Environment.NewLine, srtElms);
+    Console.WriteLine("args[0]: 0 => 動画 概要欄向け / 1 => Srt ファイル");
+    Console.WriteLine("args[1]: 文字起こしファイルのパス");
+    Console.WriteLine("args[2]: 開始時刻の調整 例: 3 と指定した場合、文字起こしファイル内の時間から 3 秒後ろにした時間で出力する。先頭 3 秒にタイトル表示時間を追加する場合などに)");
+    Console.WriteLine("args[3]: Srt ファイルを作成する場合の、字幕の表示時間(秒)");
+    return;
+}
 
+var values = Values.Parse(args);
+
+if (values.Type == 0)
+{
+    var result = YT.Format(values);
     Console.WriteLine(result);
 }
 else
 {
-    var srtElms = lines.Select(line =>
-    {
-        var time_start = Commons.TimeFormat(line.Time + start);
-        var title = line.Title.Trim();
-        var description = string.Join(" ", line.Description).Trim();
-        var _result = @$"{time_start} {title} {description}";
-        return _result.Trim();
-    }).ToArray();
-    var result = string.Join(Environment.NewLine, srtElms);
+    var srtElms = values.Lines.Select((line, index) => ToSrt.ToSrt.Format(index + 1, line, values.Start, values.Span)).ToArray();
+    var result = string.Join(Environment.NewLine + Environment.NewLine, srtElms);
+
+    Console.WriteLine(result);
 }
+
 
